@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "527540025228",
+    "project_id": "boularinfo-47649",
+    "storage_bucket": "boularinfo-47649.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527540025228:android:4601187f1cd7acd680c8a9",
+        "android_client_info": {
+          "package_name": "com.example.boularinfo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527540025228-jsm4la3t7dbf3fmgodlbtu7v58h0m5p8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_mqjCCh_0gKP6jNi-i5jiS5d_Z25H4Oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527540025228-jsm4la3t7dbf3fmgodlbtu7v58h0m5p8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "527540025228-9svpfbf4u9ufl00vcqvm8fqp6jhmrvim.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.boularinfo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
