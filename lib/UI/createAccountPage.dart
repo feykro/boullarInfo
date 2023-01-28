@@ -2,6 +2,7 @@ import 'package:boularinfo/UI/coloredTextFormField.dart';
 import 'package:boularinfo/UI/roundedButton.dart';
 import 'package:boularinfo/models/locator.dart';
 import 'package:boularinfo/models/loginManager.dart';
+import 'package:boularinfo/utils/colors.dart';
 import 'package:boularinfo/utils/formValidationUtil.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class CreateAccountPage extends StatefulWidget {
 class _CreateAccountPageState extends State<CreateAccountPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordConfirmController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController classController = TextEditingController(); // TODO: get list of class from firebase
@@ -22,11 +24,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   String? nom;
   String? email;
   String? password;
+  String? passwordConfirm;
   String? dropdownValue;
   String? prenomValidation;
   String? nomValidation;
   String? emailValidation;
   String? passwordValidation;
+  String? passwordConfirmValidation;
   bool shouldDisplayClassHint = false;
 
   @override
@@ -41,12 +45,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       appBar: AppBar(
         title: const Text("Créer un compte"),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.green[700]!,
+        foregroundColor: mainGreenColor,
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2.5),
           child: Container(
-            color: Colors.green[700]!,
+            color: mainGreenColor,
             height: 2.5,
           ),
         ),
@@ -62,10 +66,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: ColoredTextFormFieldBuilder.getColoredTextFormField(
-                      mainColor: Colors.green[700],
-                      backgroundColor: Colors.lightGreen[50],
-                      lblText: "Prenom",
-                      controller: nameController),
+                    mainColor: mainGreenColor,
+                    backgroundColor: lightGreenColor,
+                    lblText: "Prenom",
+                    controller: nameController,
+                    onChanged: (newValue) {
+                      prenom = newValue;
+                      setState(() {
+                        prenomValidation = FormValidationUtil.validateName(newValue);
+                      });
+                    },
+                  ),
                 ),
                 if (prenomValidation != null)
                   Padding(
@@ -82,10 +93,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: ColoredTextFormFieldBuilder.getColoredTextFormField(
-                      mainColor: Colors.green[700],
-                      backgroundColor: Colors.lightGreen[50],
-                      lblText: "Nom",
-                      controller: surnameController),
+                    mainColor: mainGreenColor,
+                    backgroundColor: lightGreenColor,
+                    lblText: "Nom",
+                    controller: surnameController,
+                    onChanged: (newValue) {
+                      nom = newValue;
+                      setState(() {
+                        nomValidation = FormValidationUtil.validateName(newValue);
+                      });
+                    },
+                  ),
                 ),
                 if (nomValidation != null)
                   Padding(
@@ -102,8 +120,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: ColoredTextFormFieldBuilder.getColoredTextFormField(
-                      mainColor: Colors.green[700],
-                      backgroundColor: Colors.lightGreen[50],
+                      mainColor: mainGreenColor,
+                      backgroundColor: lightGreenColor,
                       lblText: "Email",
                       icon: Icons.mail_outline,
                       controller: emailController,
@@ -129,12 +147,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: ColoredTextFormFieldBuilder.getColoredTextFormField(
-                      mainColor: Colors.green[700],
-                      backgroundColor: Colors.lightGreen[50],
+                      mainColor: mainGreenColor,
+                      backgroundColor: lightGreenColor,
                       lblText: "Mot de passe",
                       icon: Icons.key_outlined,
                       controller: passwordController,
-                      obscureTxt: true,
+                      isSecret: true,
                       onChanged: (newValue) {
                         setState(() {
                           password = newValue;
@@ -152,6 +170,35 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       ),
                     ),
                   ),
+                SizedBox(height: screenHeight * 0.02),
+                // ===== Champ Confirm Password =====
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: ColoredTextFormFieldBuilder.getColoredTextFormField(
+                      mainColor: mainGreenColor,
+                      backgroundColor: lightGreenColor,
+                      lblText: "Confirmez mot de passe",
+                      icon: Icons.key_outlined,
+                      controller: passwordConfirmController,
+                      isSecret: true,
+                      onChanged: (newValue) {
+                        setState(() {
+                          passwordConfirm = newValue;
+                          passwordConfirmValidation =
+                              (passwordConfirm == password) ? null : "Différent du mot de passe";
+                        });
+                      }),
+                ),
+                if (passwordConfirmValidation != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6, left: 20, right: 20),
+                    child: Text(
+                      passwordConfirmValidation ?? "Confirmation incorrecte",
+                      style: const TextStyle(
+                        color: Colors.deepOrangeAccent,
+                      ),
+                    ),
+                  ),
                 SizedBox(height: screenHeight * 0.04),
                 //  ===== Classe dropdown =====
                 SizedBox(
@@ -160,14 +207,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Colors.green[700]!, width: 2),
+                      border: Border.all(color: mainGreenColor, width: 2),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         value: dropdownValue,
                         hint: const Text("Classe"),
-                        style: TextStyle(color: Colors.green[700]!, fontSize: 15, fontWeight: FontWeight.w500),
-                        iconEnabledColor: Colors.green[700]!,
+                        style: const TextStyle(color: mainGreenColor, fontSize: 15, fontWeight: FontWeight.w500),
+                        iconEnabledColor: mainGreenColor,
                         onChanged: (newValue) {
                           setState(() {
                             if (newValue != null) dropdownValue = newValue;
@@ -214,7 +261,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 child: RoundedButton(
                   text: "Confirmer la création du compte",
                   color: Colors.white,
-                  backgroundColor: Colors.green[700]!,
+                  backgroundColor: mainGreenColor,
                   hasBorder: false,
                   onPressed: () async {
                     if (canCreateAccount()) {
@@ -235,7 +282,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   bool canCreateAccount() {
-    if (prenomValidation != null || nomValidation != null || emailValidation != null || passwordValidation != null) {
+    if (prenomValidation != null ||
+        nomValidation != null ||
+        emailValidation != null ||
+        passwordValidation != null ||
+        passwordConfirmValidation != null) {
       return false;
     }
     if (prenom == null) {
@@ -259,6 +310,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     if (password == null) {
       setState(() {
         passwordValidation = "Ce champ ne peut pas être vide";
+      });
+      return false;
+    }
+    if (passwordConfirm == null) {
+      setState(() {
+        passwordConfirmValidation = "Ce champ ne peut pas être vide";
       });
       return false;
     }
@@ -292,7 +349,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               child: const Text(
                 'OK',
                 style: TextStyle(
-                  color: Colors.teal,
+                  color: mainGreenColor,
                 ),
               ),
               onPressed: () {

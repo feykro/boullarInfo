@@ -1,6 +1,7 @@
 import 'package:boularinfo/UI/roundedButton.dart';
 import 'package:boularinfo/models/locator.dart';
 import 'package:boularinfo/models/loginManager.dart';
+import 'package:boularinfo/utils/colors.dart';
 import 'package:boularinfo/utils/formValidationUtil.dart';
 import 'package:flutter/material.dart';
 
@@ -46,16 +47,17 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: ColoredTextFormFieldBuilder.getColoredTextFormField(
-                  mainColor: Colors.blue[700],
-                  backgroundColor: Colors.lightBlue[50],
-                  icon: Icons.mail_outline,
-                  lblText: "email",
-                  controller: emailController,
-                  onChanged: (newValue) {
-                    setState(() {
-                      emailValidation = FormValidationUtil.validateEmail(newValue);
-                    });
-                  },),
+                mainColor: mainBlueColor,
+                backgroundColor: lightBlueColor,
+                icon: Icons.mail_outline,
+                lblText: "Email",
+                controller: emailController,
+                onChanged: (newValue) {
+                  setState(() {
+                    emailValidation = FormValidationUtil.validateEmail(newValue);
+                  });
+                },
+              ),
             ),
             SizedBox(height: screenHeight * 0.01),
             if (emailValidation != null)
@@ -74,13 +76,13 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: ColoredTextFormFieldBuilder.getColoredTextFormField(
-                mainColor: Colors.blue[700],
-                backgroundColor: Colors.lightBlue[50],
+                mainColor: mainBlueColor,
+                backgroundColor: lightBlueColor,
                 icon: Icons.key_outlined,
-                lblText: "mot de passe",
+                lblText: "Mot de passe",
                 controller: passwordController,
-                obscureTxt: true,
-                ),
+                isSecret: true,
+              ),
             ),
             SizedBox(height: screenHeight * 0.01),
             if (connexionValidation != null)
@@ -125,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 color: Colors.white,
-                backgroundColor: Colors.blue[700]!,
+                backgroundColor: mainBlueColor,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
                 hasBorder: false,
               ),
@@ -134,12 +136,12 @@ class _LoginPageState extends State<LoginPage> {
             // ===== Password forgotten =====
             InkWell(
               onTap: () {},
-              child: Text(
+              child: const Text(
                 "Mot de passe oublié ?",
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue[700],
+                  color: mainBlueColor,
                 ),
               ),
             ),
@@ -170,11 +172,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool canSubmit() {
-    if (emailValidation == null && passwordController.text.isNotEmpty) {
+    if (emailValidation == null && emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       return true;
     }
     setState(() {
-      if (emailValidation != null) {
+      if (emailValidation != null && emailController.text.isNotEmpty) {
         setState(() {
           connexionValidation = "Le champ mot de passe doit être renseigné";
         });

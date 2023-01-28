@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ColoredTextFormFieldBuilder {
-
   static Widget getColoredTextFormField({
-      Color? mainColor,
-      Color? backgroundColor,
-      IconData? icon,
-      required String lblText,
-      bool obscureTxt = false,
-      required TextEditingController controller,
-      Function(String)? onChanged,}
-      ) {
+    Color? mainColor,
+    Color? backgroundColor,
+    IconData? icon,
+    required String lblText,
+    bool isSecret = false,
+    required TextEditingController controller,
+    Function(String)? onChanged,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -31,7 +30,7 @@ class ColoredTextFormFieldBuilder {
             labelText: lblText,
             labelStyle: TextStyle(color: mainColor),
           ),
-          obscureText: obscureTxt,
+          obscureText: isSecret,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: mainColor,
